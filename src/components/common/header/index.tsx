@@ -25,6 +25,7 @@ const Frame = styled.div`
 const LogoImg = styled.img`
   width: 40px;
   height: 48px;
+  cursor: pointer;
 `;
 
 const LinkText = styled.span`
@@ -35,6 +36,7 @@ const LinkText = styled.span`
   font-size: 18px;
   &:hover {
     text-decoration: underline;
+    cursor: pointer;
   }
 `;
 
