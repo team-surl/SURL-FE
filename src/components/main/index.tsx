@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Header from "../common/header";
 import { LinkImg } from "../../assets/img";
+import Chart from "../chart";
 
 function Main() {
   return (
@@ -15,7 +16,9 @@ function Main() {
             <BTN>링크단축</BTN>
           </URLBox>
           <Text>방문자 통계</Text>
-          <Chart></Chart>
+          <ChartContainer>
+            <Chart></Chart>
+          </ChartContainer>
         </Template>
       </Frame>
     </>
@@ -76,6 +79,13 @@ const BTN = styled.button`
   border: none;
   border-radius: 30px;
   margin-left: 10px;
+  &:hover {
+    background: ${({ theme }) => theme.color.point};
+    cursor: pointer;
+  }
+  &:active {
+    background: ${({ theme }) => theme.color.point1};
+  }
 `;
 
 const Text = styled.p`
@@ -85,10 +95,9 @@ const Text = styled.p`
   margin-bottom: 20px;
 `;
 
-const Chart = styled.div`
+const ChartContainer = styled.div`
   width: 750px;
   height: 350px;
-  border: solid black;
 `;
 
 export default Main;
