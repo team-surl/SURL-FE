@@ -4,6 +4,7 @@ import Header from "../common/header";
 import { LinkImg, CopyImg, Download } from "../../assets/img";
 import Chart from "../chart";
 import { QRCodeCanvas } from "qrcode.react";
+import { customToast } from "../../utils/Toast";
 
 function Main() {
   const [input, setInput] = useState<string>("");
@@ -17,11 +18,12 @@ function Main() {
   };
   const onSURL = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (input === "") {
+      customToast("URL을 입력해주세요.", "error");
       e.preventDefault();
-      alert("단축할 URL을 입력해주세요.");
     } else {
+      customToast("SURL success!", "success");
+
       setClick(true);
-      console.log("sort URL");
     }
   };
   return (
