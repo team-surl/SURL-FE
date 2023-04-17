@@ -1,28 +1,36 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
+
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, registerables } from "chart.js";
-import type { ChartData, ChartOptions } from "chart.js";
+
 ChartJS.register(...registerables);
 
-function Chart() {
-  let date = new Date();
+interface DatesType {
+  thisDay: number;
+  week: number;
+}
 
-  const [dates, setDate] = useState({
-    thisDay: date.getDate(),
-    week: date.getMonth(),
+function Chart() {
+  const date = new Date();
+  const [dates, setDate] = useState<DatesType>({
+    thisDay: 0,
+    week: 0,
   });
   const { thisDay, week } = dates;
-  const dataList = [1, 6, 8, 9, 4, 5, 30]; //더미 데이터
+  const dataList = [1, 6, 3, 9, 4, 5, 10]; //더미 데이터
   const today = `${week}월 ${thisDay}일`;
-  let dayLabels = [];
-  console.log(today);
-
-  for (let i = thisDay - 7; i < thisDay; i++) {
+  let dayLabels: any = [];
+  useEffect(() => {
+    setDate({
+      thisDay: date.getDate(),
+      week: date.getMonth(),
+    });
+  }, []);
+  for (let i = thisDay - 6; i <= thisDay; i++) {
     dayLabels.push(`${week}월 ${i}일`);
   }
 
-  console.log(dayLabels.map((x) => x));
+  console.log(dayLabels);
 
   const options: object = {
     plugins: {
@@ -42,14 +50,14 @@ function Chart() {
     },
   };
   const data = {
-    labels: dayLabels.map((day) => day),
+    labels: dayLabels.map((day: any) => day),
     datasets: [
       {
         barThickness: 40,
         borderRadius: 30,
 
         data: dataList,
-        backgroundColor: dayLabels.map((day) => day === today)
+        backgroundColor: dayLabels.map((day: any) => day === today)
           ? "#6680B5"
           : "#A8B6D5",
       },
