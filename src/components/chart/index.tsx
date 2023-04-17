@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, registerables } from "chart.js";
+import { MappedTypeNode } from "typescript";
 
 ChartJS.register(...registerables);
 
@@ -19,7 +19,7 @@ function Chart() {
   const { thisDay, week } = dates;
   const dataList = [1, 6, 3, 9, 4, 5, 10]; //더미 데이터
   const today = `${week}월 ${thisDay}일`;
-  let dayLabels: any = [];
+  let dayLabels: Array<String> = [];
   useEffect(() => {
     setDate({
       thisDay: date.getDate(),
@@ -30,8 +30,6 @@ function Chart() {
     dayLabels.push(`${week}월 ${i}일`);
   }
 
-  console.log(dayLabels);
-
   const options: object = {
     plugins: {
       legend: {
@@ -39,25 +37,23 @@ function Chart() {
       },
     },
     scales: {
-      yAxes: [
-        {
-          ticks: {
-            min: 20, // y축 스케일에 대한 최소값 설정
-            stepSize: 1, // y축 그리드 한 칸당 수치
-          },
+      yAxes: {
+        ticks: {
+          min: 20, // y축 스케일에 대한 최소값 설정
+          stepSize: 1, // y축 그리드 한 칸당 수치
         },
-      ],
+      },
     },
   };
   const data = {
-    labels: dayLabels.map((day: any) => day),
+    labels: dayLabels.map((day: String) => day),
     datasets: [
       {
         barThickness: 40,
         borderRadius: 30,
 
         data: dataList,
-        backgroundColor: dayLabels.map((day: any) => day === today)
+        backgroundColor: dayLabels.map((day: String) => day === today)
           ? "#6680B5"
           : "#A8B6D5",
       },
