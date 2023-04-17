@@ -1,19 +1,63 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
+import styled, { css } from "styled-components";
 import Header from "../common/header";
-import { LinkImg } from "../../assets/img";
+import { LinkImg, CopyImg, Download } from "../../assets/img";
 import Chart from "../chart";
+import { QRCodeCanvas } from "qrcode.react";
 
 function Main() {
+  const [input, setInput] = useState<string>("");
+  const [click, setClick] = useState<boolean>(false);
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (click) {
+      e.preventDefault();
+    } else {
+      setInput(e.target.value);
+    }
+  };
+  const onSURL = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (input === "") {
+      e.preventDefault();
+      alert("단축할 URL을 입력해주세요.");
+    } else {
+      setClick(true);
+      console.log("sort URL");
+    }
+  };
   return (
     <>
       <Header></Header>
       <Frame>
         <Template>
-          <URLBox>
-            <Icon src={LinkImg} />
-            <URLInput placeholder="단축할 링크를 입력해주세요." />
-            <BTN>링크단축</BTN>
+          <URLBox click={click}>
+            <Wrapper>
+              <Icon
+                onClick={() => {
+                  window.location.replace("/");
+                }}
+                src={LinkImg}
+              />
+              <URLInput
+                placeholder="단축할 링크를 입력해주세요."
+                onChange={onChange}
+                value={input}
+              />
+              <BTN onClick={onSURL}>링크단축</BTN>
+            </Wrapper>
+            {click && (
+              <>
+                <SURLBox>
+                  https://www.figma.com <Icon src={CopyImg} />
+                </SURLBox>
+                <QRContainer>
+                  <QRCodeCanvas value={input}></QRCodeCanvas>
+                </QRContainer>
+                <DownloadQR>
+                  {" "}
+                  <Icon src={Download}></Icon> QR다운로드
+                </DownloadQR>
+              </>
+            )}
           </URLBox>
           <Text>방문자 통계</Text>
           <ChartContainer>
@@ -27,36 +71,49 @@ function Main() {
 
 const Frame = styled.div`
   width: 100vw;
-  height: 100vh;
-
   display: flex;
   justify-content: center;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
   align-items: center;
 `;
 
 const Template = styled.div`
   width: 900px;
-  height: 750px;
+  min-height: 700px;
   background: ${({ theme }) => theme.color.white};
   border-radius: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 60px;
+  margin-bottom: 100px;
 `;
 
-const URLBox = styled.div`
+const URLBox = styled.div<{ click: boolean }>`
   width: 600px;
-  height: 60px;
-  border-radius: 30px;
+  ${({ click }) =>
+    click
+      ? css`
+          border-radius: 30px 30px 0px 0px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        `
+      : css`
+          border-radius: 30px;
+        `};
+  height: ${({ click }) => (click ? "400px" : "60px")};
   background: ${({ theme }) => theme.color.point4};
-  margin-bottom: 180px;
-  display: flex;
-  align-items: center;
-  padding: 0px 6px 0px 20px;
+  margin-bottom: 150px;
+  padding: 10px 10px 0px 20px;
 `;
 
-const Icon = styled.img``;
+const Icon = styled.img`
+  cursor: pointer;
+`;
 
 const URLInput = styled.input`
   width: 440px;
@@ -98,6 +155,44 @@ const Text = styled.p`
 const ChartContainer = styled.div`
   width: 750px;
   height: 350px;
+  margin-bottom: 50px;
+`;
+
+const SURLBox = styled.div`
+  width: 350px;
+  height: 60px;
+  border-radius: 30px;
+  border: solid ${({ theme }) => theme.color.point1};
+  background: ${({ theme }) => theme.color.white};
+  margin: 40px 0px 25px 0px;
+  font-weight: bold;
+  font-size: 18px;
+  font-family: ${({ theme }) => theme.font.pretendard};
+  display: flex;
+  align-items: center;
+  padding: 0px 20px 0px 30px;
+  justify-content: space-between;
+`;
+
+const QRContainer = styled.div`
+  width: 160px;
+  height: 160px;
+  background: ${({ theme }) => theme.color.white};
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 30px;
+`;
+
+const DownloadQR = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+  font-family: ${({ theme }) => theme.font.pretendard};
+  cursor: pointer;
 `;
 
 export default Main;
