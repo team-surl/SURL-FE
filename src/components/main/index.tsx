@@ -5,10 +5,15 @@ import { LinkImg, CopyImg, Download } from "../../assets/img";
 import Chart from "../chart";
 import { QRCodeCanvas } from "qrcode.react";
 import { customToast } from "../../utils/Toast";
+import CreateSURL from "../../apis/sortUrl/createSURL";
+import useCopyClipBoard from "../../hooks/useTextCopy";
 
 function Main() {
   const [input, setInput] = useState<string>("");
+  const [surl, setSurl] = useState<string>("");
   const [click, setClick] = useState<boolean>(false);
+  const [isCopy, setCopy] = useCopyClipBoard();
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (click) {
       e.preventDefault();
@@ -16,19 +21,51 @@ function Main() {
       setInput(e.target.value);
     }
   };
-  const onSURL = (e: React.MouseEvent<HTMLButtonElement>) => {
+
+  const handleOnKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      onSURL(e); // Enter 입력이 되면 클릭 이벤트 실행
+    }
+  };
+
+  const onSURL = (e: React.KeyboardEvent | React.MouseEvent) => {
     if (input === "") {
       customToast("URL을 입력해주세요.", "error");
       e.preventDefault();
+    } else if (click === true) {
+      customToast("이미 단축되었습니다.", "error");
+      e.preventDefault();
     } else {
       customToast("SURL success!", "success");
-
+      CreateSURL(input)
+        .then((res) => {
+          setSurl(res.data.surl);
+        })
+        .catch((err) => console.log(err));
       setClick(true);
     }
   };
+
+  const handleCopyClipBoard = (text: string) => {
+    setCopy(text);
+  };
+
+  const downloadQR = () => {
+    let qrCodeURL: any = document
+      .querySelector("canvas")
+      ?.toDataURL("image/png")
+      .replace("image/png", "image/octet-stream");
+    let aEl = document.createElement("a");
+    aEl.href = qrCodeURL;
+    aEl.download = "QR.png";
+    document.body.appendChild(aEl);
+    aEl.click();
+    document.body.removeChild(aEl);
+  };
+
   return (
     <>
-      <Header></Header>
+      <Header />
       <Frame>
         <Template>
           <URLBox click={click}>
@@ -43,27 +80,35 @@ function Main() {
                 placeholder="단축할 링크를 입력해주세요."
                 onChange={onChange}
                 value={input}
+                onKeyPress={handleOnKeyPress}
               />
               <BTN onClick={onSURL}>링크단축</BTN>
             </Wrapper>
             {click && (
               <>
                 <SURLBox>
-                  https://www.figma.com <Icon src={CopyImg} />
+                  {surl}{" "}
+                  <Icon
+                    src={CopyImg}
+                    onClick={() => {
+                      handleCopyClipBoard(surl);
+                      console.log(isCopy);
+                    }}
+                  />
                 </SURLBox>
                 <QRContainer>
-                  <QRCodeCanvas value={input}></QRCodeCanvas>
+                  <QRCodeCanvas id="qrCodeEl" value={input} />
                 </QRContainer>
-                <DownloadQR>
+                <DownloadQR onClick={downloadQR}>
                   {" "}
-                  <Icon src={Download}></Icon> QR다운로드
+                  <Icon src={Download} /> QR다운로드
                 </DownloadQR>
               </>
             )}
           </URLBox>
           <Text>방문자 통계</Text>
           <ChartContainer>
-            <Chart></Chart>
+            <Chart />
           </ChartContainer>
         </Template>
       </Frame>
