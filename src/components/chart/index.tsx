@@ -26,8 +26,9 @@ function Chart() {
       week: date.getMonth(),
     });
   }, []);
+
   for (let i = thisDay - 6; i <= thisDay; i++) {
-    dayLabels.push(`${week}월 ${i}일`);
+    dayLabels.push(`${week + 1}월 ${i}일`);
   }
 
   const options: object = {
