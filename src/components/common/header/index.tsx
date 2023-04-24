@@ -1,12 +1,19 @@
 import React from "react";
 import styled from "styled-components";
 import { Logo } from "../../../assets/img";
+import { Link } from "react-router-dom";
 
 function Header() {
   return (
     <Frame>
-      <LogoImg src={Logo}></LogoImg>
-      <LinkText>통계</LinkText>
+      <LogoImg
+        onClick={() => {
+          window.location.replace("/");
+        }}
+        src={Logo}
+      ></LogoImg>
+
+      <LinkText to="/statistics">통계</LinkText>
     </Frame>
   );
 }
@@ -28,12 +35,14 @@ const LogoImg = styled.img`
   cursor: pointer;
 `;
 
-const LinkText = styled.span`
+const LinkText = styled(Link)`
   position: absolute;
   right: 10%;
   font-family: ${({ theme }) => theme.font.pretendard};
   font-weight: bold;
   font-size: 18px;
+  text-decoration: none;
+  color: ${({ theme }) => theme.color.black};
   &:hover {
     text-decoration: underline;
     cursor: pointer;
