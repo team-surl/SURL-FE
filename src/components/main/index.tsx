@@ -8,11 +8,21 @@ import { customToast } from "../../utils/Toast";
 import CreateSURL from "../../apis/sortUrl/createSURL";
 import useCopyClipBoard from "../../hooks/useTextCopy";
 
-function Main() {
+interface Props {
+  onClick?: React.MouseEvent;
+}
+
+function Main(props: Props) {
   const [input, setInput] = useState<string>("");
   const [surl, setSurl] = useState<string>("");
   const [click, setClick] = useState<boolean>(false);
   const [isCopy, setCopy] = useCopyClipBoard();
+  const [hover, setHover] = useState({
+    downloadHover: false,
+    linkHover: false,
+    copyHover: false,
+  });
+  const { downloadHover, linkHover, copyHover } = hover;
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (click) {
@@ -70,12 +80,20 @@ function Main() {
         <Template>
           <URLBox click={click}>
             <Wrapper>
-              <Icon
+              <CursorPointer
                 onClick={() => {
                   window.location.replace("/");
                 }}
-                src={LinkImg}
-              />
+                onMouseOver={() => {
+                  setHover({ ...hover, linkHover: true });
+                }}
+                onMouseLeave={() => {
+                  setHover({ ...hover, linkHover: false });
+                }}
+              >
+                <LinkImg hover={linkHover} />
+              </CursorPointer>
+
               <URLInput
                 placeholder="단축할 링크를 입력해주세요."
                 onChange={onChange}
@@ -87,21 +105,33 @@ function Main() {
             {click && (
               <>
                 <SURLBox>
-                  {surl}{" "}
-                  <Icon
-                    src={CopyImg}
-                    onClick={() => {
-                      handleCopyClipBoard(surl);
-                      console.log(isCopy);
+                  {surl}
+                  <CursorPointer
+                    onClick={() => handleCopyClipBoard(surl)}
+                    onMouseOver={() => {
+                      setHover({ ...hover, copyHover: true });
                     }}
-                  />
+                    onMouseLeave={() =>
+                      setHover({ ...hover, copyHover: false })
+                    }
+                  >
+                    <CopyImg hover={copyHover} />
+                  </CursorPointer>
                 </SURLBox>
                 <QRContainer>
                   <QRCodeCanvas id="qrCodeEl" value={input} />
                 </QRContainer>
-                <DownloadQR onClick={downloadQR}>
-                  {" "}
-                  <Icon src={Download} /> QR다운로드
+                <DownloadQR
+                  hover={hover.downloadHover}
+                  onMouseOver={() => {
+                    setHover({ ...hover, downloadHover: true });
+                  }}
+                  onMouseLeave={() =>
+                    setHover({ ...hover, downloadHover: false })
+                  }
+                  onClick={downloadQR}
+                >
+                  <Download hover={downloadHover} /> QR다운로드
                 </DownloadQR>
               </>
             )}
@@ -157,11 +187,6 @@ const URLBox = styled.div<{ click: boolean }>`
   margin-bottom: 150px;
   padding: 10px 10px 0px 20px;
 `;
-
-const Icon = styled.img`
-  cursor: pointer;
-`;
-
 const URLInput = styled.input`
   width: 440px;
   font-family: ${({ theme }) => theme.font.pretendard};
@@ -232,7 +257,7 @@ const QRContainer = styled.div`
   border-radius: 30px;
 `;
 
-const DownloadQR = styled.div`
+const DownloadQR = styled.div<{ hover: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -240,6 +265,20 @@ const DownloadQR = styled.div`
   font-size: 18px;
   font-family: ${({ theme }) => theme.font.pretendard};
   cursor: pointer;
+  color: ${(props) =>
+    props.hover
+      ? css`
+          ${({ theme }) => theme.color.point1}
+        `
+      : css`
+          ${({ theme }) => theme.color.black}
+        `};
+`;
+
+const CursorPointer = styled.div`
+  :hover {
+    cursor: pointer;
+  }
 `;
 
 export default Main;

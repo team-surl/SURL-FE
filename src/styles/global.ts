@@ -15,6 +15,11 @@ const GlobalStyle = createGlobalStyle`
         background-position: top center;
         background-size: cover;
         background-attachment: fixed;
+
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -ms-user-select: none; /* 인터넷익스플로러 */
+        user-select: none;
     }
 `;
 
