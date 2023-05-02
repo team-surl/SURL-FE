@@ -8,11 +8,7 @@ import { customToast } from "../../utils/Toast";
 import CreateSURL from "../../apis/sortUrl/createSURL";
 import useCopyClipBoard from "../../hooks/useTextCopy";
 
-interface Props {
-  onClick?: React.MouseEvent;
-}
-
-function Main(props: Props) {
+function Main() {
   const [input, setInput] = useState<string>("");
   const [surl, setSurl] = useState<string>("");
   const [click, setClick] = useState<boolean>(false);
