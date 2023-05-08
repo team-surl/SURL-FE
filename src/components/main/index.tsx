@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import Header from "../common/header";
 import { LinkImg, CopyImg, Download } from "../../assets/img";
-import Chart from "../chart";
+import Chart from "../chart/dayChart";
 import { QRCodeCanvas } from "qrcode.react";
 import { customToast } from "../../utils/Toast";
 import CreateSURL from "../../apis/sortUrl/createSURL";
