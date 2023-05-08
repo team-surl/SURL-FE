@@ -1,13 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 import Header from "../common/header";
+import ContryChart from "../chart/contryChart";
 
 function Statistics() {
   return (
     <>
       <Header></Header>
       <Frame>
-        <Template></Template>
+        <Template>
+          <ContryChart></ContryChart>
+        </Template>
       </Frame>
     </>
   );
@@ -20,14 +23,13 @@ const Frame = styled.div`
 `;
 
 const Template = styled.div`
-  width: 900px;
-  min-height: 700px;
+  width: 1200px;
+  min-height: 1000px;
   background: ${({ theme }) => theme.color.white};
   border-radius: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 60px;
   margin-bottom: 100px;
 `;
 
