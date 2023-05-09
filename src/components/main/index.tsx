@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import Header from "../common/header";
 import { LinkImg, CopyImg, Download } from "../../assets/img";
-import Chart from "../chart/dayChart";
+import DayChart from "../chart/dayChart";
 import { QRCodeCanvas } from "qrcode.react";
 import { customToast } from "../../utils/Toast";
 import CreateSURL from "../../apis/sortUrl/createSURL";
@@ -133,9 +133,8 @@ function Main() {
             )}
           </URLBox>
           <Text>방문자 통계</Text>
-          <ChartContainer>
-            <Chart />
-          </ChartContainer>
+
+          <DayChart />
         </Template>
       </Frame>
     </>
@@ -218,12 +217,6 @@ const Text = styled.p`
   font-family: ${({ theme }) => theme.font.pretendard};
   font-weight: bold;
   margin-bottom: 20px;
-`;
-
-const ChartContainer = styled.div`
-  width: 750px;
-  height: 350px;
-  margin-bottom: 50px;
 `;
 
 const SURLBox = styled.div`
