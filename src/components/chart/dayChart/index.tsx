@@ -1,9 +1,10 @@
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, registerables } from "chart.js";
+import styled from "styled-components";
 
 ChartJS.register(...registerables);
 
-function Chart() {
+function DayChart() {
   const dayLabels: String[] = [];
   const dataList = [1, 6, 3, 9, 4, 5, 10]; //더미 데이터
 
@@ -65,7 +66,16 @@ function Chart() {
       },
     ],
   };
-  return <Bar data={data} options={options} />;
+  return (
+    <ChartContainer>
+      <Bar data={data} options={options} />
+    </ChartContainer>
+  );
 }
 
-export default Chart;
+const ChartContainer = styled.div`
+  width: 750px;
+  height: 350px;
+  margin-bottom: 50px;
+`;
+export default DayChart;

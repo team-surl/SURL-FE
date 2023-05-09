@@ -56,7 +56,7 @@ function ContryChart() {
 }
 
 const Frame = styled.div`
-  width: 1000px;
+  width: 800px;
 `;
 
 export default ContryChart;
