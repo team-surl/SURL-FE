@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { Logo } from "../../../assets/img";
 import { Link } from "react-router-dom";
@@ -21,7 +20,7 @@ function Header() {
 const Frame = styled.div`
   width: 100vw;
   height: 80px;
-  margin-bottom: 150px;
+  margin-bottom: 100px;
   background: ${({ theme }) => theme.color.white};
 
   display: flex;
