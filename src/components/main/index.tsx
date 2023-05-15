@@ -6,7 +6,6 @@ import DayChart from "../chart/dayChart";
 import { QRCodeCanvas } from "qrcode.react";
 import { customToast } from "../../utils/Toast";
 import CreateSURL from "../../apis/sortUrl/createSURL";
-import GetSURL from "../../apis/sortUrl/getSurl";
 import useCopyClipBoard from "../../hooks/useTextCopy";
 
 function Main() {
@@ -53,9 +52,6 @@ function Main() {
           console.log(err);
           customToast("Error", "error");
         });
-      GetSURL()
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
     }
   };
 
