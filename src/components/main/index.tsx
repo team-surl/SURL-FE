@@ -6,6 +6,7 @@ import DayChart from "../chart/dayChart";
 import { QRCodeCanvas } from "qrcode.react";
 import { customToast } from "../../utils/Toast";
 import CreateSURL from "../../apis/sortUrl/createSURL";
+import GetSURL from "../../apis/sortUrl/getSurl";
 import useCopyClipBoard from "../../hooks/useTextCopy";
 
 function Main() {
@@ -42,13 +43,19 @@ function Main() {
       customToast("이미 단축되었습니다.", "error");
       e.preventDefault();
     } else {
-      customToast("SURL success!", "success");
       CreateSURL(input)
         .then((res) => {
           setSurl(res.data.surl);
+          setClick(true);
+          customToast("SURL success!", "success");
         })
+        .catch((err) => {
+          console.log(err);
+          customToast("Error", "error");
+        });
+      GetSURL()
+        .then((res) => console.log(res))
         .catch((err) => console.log(err));
-      setClick(true);
     }
   };
 
