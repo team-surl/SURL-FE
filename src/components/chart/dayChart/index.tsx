@@ -6,13 +6,13 @@ ChartJS.register(...registerables);
 
 function DayChart() {
   const dayLabels: String[] = [];
-  const dataList = [1, 6, 3, 9, 4, 5, 10]; //더미 데이터
+  const dataList = [1, 6, 3, 9, 4, 5, 10, 5]; //더미 데이터
 
   let date = new Date();
   const thisday = date.getDate();
   const thisMonth = date.getMonth() + 1;
 
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i <= 7; i++) {
     if (thisday - i <= 0) {
       let weekAgo = date.setDate(thisday - i);
       date = new Date(weekAgo);
@@ -55,6 +55,7 @@ function DayChart() {
         borderRadius: 30,
         data: dataList,
         backgroundColor: [
+          "#6680B5",
           "#6680B5",
           "#6680B5",
           "#6680B5",
