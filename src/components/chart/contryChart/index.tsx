@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import styled, { css } from "styled-components";
+import PopUp from "../../mousePopUp";
 // import GetGeo from "../../../apis/geo/getGeo";
 
 const geoUrl =
@@ -10,6 +11,11 @@ const geoUrl =
 function ContryChart() {
   const [geoName, setGeo] = useState("");
   const [hover, setHover] = useState(false);
+  const [xy, setXY] = useState({ x: 0, y: 0 });
+
+  const mouseMove = (e: React.MouseEvent) => {
+    setXY({ x: e.clientX, y: e.clientY });
+  };
 
   // const getGeoInfo = () => {
   //   const geoInfo = axios
@@ -26,7 +32,10 @@ function ContryChart() {
   // };
 
   return (
-    <Frame>
+    <Frame onMouseMove={mouseMove}>
+      <PopUp x={xy.x} y={xy.y} geoName={geoName}>
+        {geoName}
+      </PopUp>
       <ComposableMap>
         <Geographies geography={geoUrl}>
           {({ geographies }) =>
@@ -36,7 +45,6 @@ function ContryChart() {
                   onMouseOver={() => {
                     setGeo(geo.id);
                     setHover(!hover);
-                    // popOver(geo.id);
                   }}
                   onMouseLeave={() => {
                     setGeo("");
