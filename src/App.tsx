@@ -3,7 +3,7 @@ import Main from "./components/main";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Statistics from "./components/statistics";
+import Statistics from "./components/stats";
 
 function App() {
   return (

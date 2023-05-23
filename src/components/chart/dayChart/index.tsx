@@ -1,12 +1,21 @@
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, registerables } from "chart.js";
 import styled from "styled-components";
-
 ChartJS.register(...registerables);
 
 function DayChart() {
   const dayLabels: String[] = [];
   const dataList = [1, 6, 3, 9, 4, 5, 10, 5]; //더미 데이터
+  const dataColor = [
+    "#6680B5",
+    "#6680B5",
+    "#6680B5",
+    "#6680B5",
+    "#6680B5",
+    "#6680B5",
+    "#6680B5",
+    "#A8B6D5",
+  ];
 
   let date = new Date();
   const thisday = date.getDate();
@@ -54,16 +63,7 @@ function DayChart() {
         barThickness: 40,
         borderRadius: 30,
         data: dataList,
-        backgroundColor: [
-          "#6680B5",
-          "#6680B5",
-          "#6680B5",
-          "#6680B5",
-          "#6680B5",
-          "#6680B5",
-          "#6680B5",
-          "#A8B6D5",
-        ],
+        backgroundColor: dataColor,
       },
     ],
   };

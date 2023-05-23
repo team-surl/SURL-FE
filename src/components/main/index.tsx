@@ -6,7 +6,7 @@ import DayChart from "../chart/dayChart";
 import { QRCodeCanvas } from "qrcode.react";
 import { customToast } from "../../utils/Toast";
 import useCopyClipBoard from "../../hooks/useTextCopy";
-import GetCode from "../../apis/statisticsAPI/getCode";
+import GetCode from "../../apis/sortUrl/getCode";
 import SecurityModal from "../securityModal";
 
 function Main() {
@@ -141,7 +141,7 @@ function Main() {
                   </CursorPointer>
                 </SURLBox>
                 <QRContainer>
-                  <QRCodeCanvas id="qrCodeEl" value={input} />
+                  <QRCodeCanvas id="qrCodeEl" value={surl} />
                 </QRContainer>
                 <DownloadQR
                   hover={hover.downloadHover}
