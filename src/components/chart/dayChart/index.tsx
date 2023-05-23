@@ -3,37 +3,39 @@ import { Chart as ChartJS, registerables } from "chart.js";
 import styled from "styled-components";
 ChartJS.register(...registerables);
 
-function DayChart() {
-  const dayLabels: String[] = [];
-  const dataList = [1, 6, 3, 9, 4, 5, 10, 5]; //더미 데이터
-  const dataColor = [
-    "#6680B5",
-    "#6680B5",
-    "#6680B5",
-    "#6680B5",
-    "#6680B5",
-    "#6680B5",
-    "#6680B5",
-    "#A8B6D5",
-  ];
+interface Props {
+  dataList: number[];
+  dataLabels: string[];
+}
 
-  let date = new Date();
-  const thisday = date.getDate();
-  const thisMonth = date.getMonth() + 1;
-
-  for (let i = 0; i <= 7; i++) {
-    if (thisday - i <= 0) {
-      let weekAgo = date.setDate(thisday - i);
-      date = new Date(weekAgo);
-      const day = `${thisMonth - 1}월 ${date.getDate()}일`;
-      dayLabels.unshift(day);
+function DayChart({ dataList, dataLabels }: Props) {
+  let dataColor: string[] = [];
+  for (let i = 0; i < dataList.length; i++) {
+    if (i === dataList.length - 1) {
+      dataColor.push("#A8B6D5");
     } else {
-      let weekAgo = date.setDate(thisday - i);
-      date = new Date(weekAgo);
-      const day = `${thisMonth}월 ${date.getDate()}일`;
-      dayLabels.unshift(day);
+      dataColor.push("#6680B5");
     }
   }
+
+  //일주일 전부터 오늘 날짜까지 구하기
+  // let date = new Date();
+  // const thisday = date.getDate();
+  // const thisMonth = date.getMonth() + 1;
+
+  // for (let i = 0; i <= 7; i++) {
+  //   if (thisday - i <= 0) {
+  //     let weekAgo = date.setDate(thisday - i);
+  //     date = new Date(weekAgo);
+  //     const day = `${thisMonth - 1}월 ${date.getDate()}일`;
+  //     dayLabels.unshift(day);
+  //   } else {
+  //     let weekAgo = date.setDate(thisday - i);
+  //     date = new Date(weekAgo);
+  //     const day = `${thisMonth}월 ${date.getDate()}일`;
+  //     dayLabels.unshift(day);
+  //   }
+  // }
 
   const options: object = {
     plugins: {
@@ -57,7 +59,7 @@ function DayChart() {
     },
   };
   const data = {
-    labels: dayLabels.map((day: String) => day),
+    labels: dataLabels,
     datasets: [
       {
         barThickness: 40,

@@ -1,22 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Header from "../common/header";
 import ContryChart from "../chart/contryChart";
 import DayChart from "../chart/dayChart";
+import DayStats from "../../apis/stats/dayStatistics";
+import { customToast } from "../../utils/Toast";
+type objectType = {
+  dataList: number[];
+  dataLabels: string[];
+};
 
 function Stats() {
+  const [input, setInput] = useState("");
+  const [dateData, setDateData] = useState<objectType>({
+    dataList: [],
+    dataLabels: [],
+  });
+  const { dataList, dataLabels } = dateData;
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+  };
+  const onStats = () => {
+    DayStats(input.slice(20, input.length)) //URL의 프로토콜과 도메인 자르기
+      .then((res) => {
+        console.log(dateData);
+        setDateData({
+          dataLabels: Object.keys(res.data),
+          dataList: Object.values(res.data),
+        });
+        customToast("통계 불러오기 성공!", "success");
+      })
+      .catch(() => customToast("잘못된 SURL 입니다.", "error"));
+  };
   return (
     <>
       <Header></Header>
       <Frame>
         <Template>
           <StatsInputBox>
-            <StatsInput placeholder="통계를 보려면 SURL을 입력하세요."></StatsInput>
-            <StatsInputBTN>통계보기</StatsInputBTN>
+            <StatsInput
+              placeholder="통계를 보려면 SURL을 입력하세요."
+              onChange={onChange}
+              value={input}
+            />
+            <StatsInputBTN onClick={onStats}>통계보기</StatsInputBTN>
           </StatsInputBox>
           <Text>방문자 통계</Text>
           <ContryChart></ContryChart>
-          <DayChart></DayChart>
+          <DayChart dataList={dataList} dataLabels={dataLabels}></DayChart>
         </Template>
       </Frame>
     </>
