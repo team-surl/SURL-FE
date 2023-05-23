@@ -5,23 +5,33 @@ import { LinkImg, CopyImg, Download } from "../../assets/img";
 import DayChart from "../chart/dayChart";
 import { QRCodeCanvas } from "qrcode.react";
 import { customToast } from "../../utils/Toast";
-import CreateSURL from "../../apis/sortUrl/createSURL";
 import useCopyClipBoard from "../../hooks/useTextCopy";
+import GetCode from "../../apis/statisticsAPI/getCode";
+import SecurityModal from "../securityModal";
 
 function Main() {
   const [input, setInput] = useState<string>("");
   const [surl, setSurl] = useState<string>("");
-  const [click, setClick] = useState<boolean>(false);
-  const [isCopy, setCopy] = useCopyClipBoard();
+  const [click, setClick] = useState({
+    surlClick: false,
+    modalClick: false,
+  });
+  const [, setCopy] = useCopyClipBoard();
   const [hover, setHover] = useState({
     downloadHover: false,
     linkHover: false,
     copyHover: false,
   });
   const { downloadHover, linkHover, copyHover } = hover;
+  const { surlClick, modalClick } = click;
+  const [code, setCode] = useState({
+    image: "",
+    securityCode: "",
+  });
+  const { image, securityCode } = code;
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (click) {
+    if (surlClick) {
       e.preventDefault();
     } else {
       setInput(e.target.value);
@@ -38,28 +48,32 @@ function Main() {
     if (input === "") {
       customToast("URL을 입력해주세요.", "error");
       e.preventDefault();
-    } else if (click === true) {
+    } else if (surlClick === true) {
       customToast("이미 단축되었습니다.", "error");
       e.preventDefault();
     } else {
-      CreateSURL(input)
+      GetCode()
         .then((res) => {
-          setSurl(res.data.surl);
-          setClick(true);
-          customToast("SURL success!", "success");
+          setClick({ ...click, modalClick: true });
+          console.log(res.data);
+          setCode({
+            image: res.data.image,
+            securityCode: res.data.code,
+          });
         })
         .catch((err) => {
           console.log(err);
-          customToast("Error", "error");
         });
     }
   };
 
   const handleCopyClipBoard = (text: string) => {
+    //URL 복사
     setCopy(text);
   };
 
   const downloadQR = () => {
+    //QR 다운로드
     let qrCodeURL: any = document
       .querySelector("canvas")
       ?.toDataURL("image/png")
@@ -74,10 +88,19 @@ function Main() {
 
   return (
     <>
+      {modalClick && (
+        <SecurityModal
+          initialImage={image}
+          initialCode={securityCode}
+          setClick={setClick}
+          urlInput={input}
+          setSurl={setSurl}
+        ></SecurityModal>
+      )}
       <Header />
       <Frame>
         <Template>
-          <URLBox click={click}>
+          <URLBox surlClick={surlClick}>
             <Wrapper>
               <CursorPointer
                 onClick={() => {
@@ -101,7 +124,7 @@ function Main() {
               />
               <BTN onClick={onSURL}>링크단축</BTN>
             </Wrapper>
-            {click && (
+            {surlClick && (
               <>
                 <SURLBox>
                   {surl}
@@ -136,7 +159,6 @@ function Main() {
             )}
           </URLBox>
           <Text>방문자 통계</Text>
-
           <DayChart />
         </Template>
       </Frame>
@@ -167,10 +189,10 @@ const Template = styled.div`
   margin-bottom: 100px;
 `;
 
-const URLBox = styled.div<{ click: boolean }>`
+const URLBox = styled.div<{ surlClick: boolean }>`
   width: 600px;
-  ${({ click }) =>
-    click
+  ${({ surlClick }) =>
+    surlClick
       ? css`
           border-radius: 30px 30px 0px 0px;
           display: flex;
@@ -180,7 +202,7 @@ const URLBox = styled.div<{ click: boolean }>`
       : css`
           border-radius: 30px;
         `};
-  height: ${({ click }) => (click ? "400px" : "60px")};
+  height: ${({ surlClick }) => (surlClick ? "400px" : "60px")};
   background: ${({ theme }) => theme.color.point4};
   margin-bottom: 150px;
   padding: 10px 10px 0px 20px;

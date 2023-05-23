@@ -1,7 +1,7 @@
-import { instance } from "../axios";
+import axios from "axios";
 
 const CreateSURL = (input: string) => {
-  const response = instance.post(`/short-url`, {
+  const response = axios.post(`${process.env.REACT_APP_SURL}/short-url`, {
     url: input,
   });
   return response;
