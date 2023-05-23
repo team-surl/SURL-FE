@@ -96,6 +96,16 @@ function SecurityModal({
   );
 }
 
+const Frame = styled.div`
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.3);
+`;
 const Box = styled.div`
   width: 700px;
   height: 700px;
@@ -104,17 +114,6 @@ const Box = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const Frame = styled.div`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  z-index: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.3);
 `;
 
 const InfoBox = styled.div`
