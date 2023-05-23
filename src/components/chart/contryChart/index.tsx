@@ -1,8 +1,7 @@
-import axios from "axios";
 import { useState } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
-import styled, { css } from "styled-components";
-import PopUp from "../../mousePopUp";
+import styled from "styled-components";
+import ToolTip from "../../tooltip";
 // import GetGeo from "../../../apis/geo/getGeo";
 
 const geoUrl =
@@ -33,9 +32,7 @@ function ContryChart() {
 
   return (
     <Frame onMouseMove={mouseMove}>
-      <PopUp x={xy.x} y={xy.y} geoName={geoName}>
-        {geoName}
-      </PopUp>
+      <ToolTip x={xy.x} y={xy.y} geoName={geoName} />
       <ComposableMap>
         <Geographies geography={geoUrl}>
           {({ geographies }) =>
