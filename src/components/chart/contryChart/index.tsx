@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import styled from "styled-components";
 import ToolTip from "../../tooltip";
+import axios from "axios";
 // import GetGeo from "../../../apis/geo/getGeo";
 
 const geoUrl =
@@ -9,30 +10,29 @@ const geoUrl =
 
 function ContryChart() {
   const [geoName, setGeo] = useState("");
+  const [geoList, setGeoList] = useState();
   const [hover, setHover] = useState(false);
   const [xy, setXY] = useState({ x: 0, y: 0 });
+  const { x, y } = xy;
 
+  useEffect(() => {
+    axios
+      .get(geoUrl)
+      .then((res) => {
+        console.log("GEO", res.data);
+      })
+      .catch((err) => console.log(err));
+    console.log(navigator.language);
+  }, []);
   const mouseMove = (e: React.MouseEvent) => {
     setXY({ x: e.clientX, y: e.clientY });
   };
 
-  // const getGeoInfo = () => {
-  //   const geoInfo = axios
-  //     .get(geoUrl)
-  //     .then((res) => {
-  //       console.log(res.data);
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
-  // geo 정보 확인
-
-  // const popOver = (geo: string) => {
-  //   console.log(geo);
-  // };
+  //geo 정보 확인
 
   return (
     <Frame onMouseMove={mouseMove}>
-      <ToolTip x={xy.x} y={xy.y} geoName={geoName} />
+      <ToolTip x={x} y={y} text={geoName} />
       <ComposableMap>
         <Geographies geography={geoUrl}>
           {({ geographies }) =>
@@ -62,6 +62,7 @@ function ContryChart() {
 
 const Frame = styled.div`
   width: 800px;
+  margin-top: -50px;
 `;
 
 export default ContryChart;
