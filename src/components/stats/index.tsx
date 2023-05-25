@@ -3,8 +3,11 @@ import styled from "styled-components";
 import Header from "../common/header";
 import ContryChart from "../chart/contryChart";
 import DayChart from "../chart/dayChart";
-import DayStats from "../../apis/stats/dayStatistics";
+import DayStats from "../../apis/stats/dayStats";
 import { customToast } from "../../utils/Toast";
+import ToolTip from "../tooltip/index";
+import WeekStats from "../../apis/stats/weekStats";
+import WorldStats from "../../apis/stats/worldStatistics";
 type objectType = {
   dataList: number[];
   dataLabels: string[];
@@ -16,6 +19,37 @@ function Stats() {
     dataList: [],
     dataLabels: [],
   });
+  const [changeChart, setChangeChart] = useState<boolean>(false);
+  const [xy, setXY] = useState({ x: 0, y: 0 });
+  const { x, y } = xy;
+  const [hover, setHover] = useState(false);
+  const mouseMove = (e: React.MouseEvent) => {
+    setXY({ x: e.clientX, y: e.clientY });
+  };
+  const onHandleChart = () => {
+    setChangeChart(!changeChart);
+    changeChart
+      ? WeekStats(input.slice(20, input.length))
+          .then((res) => {
+            setDateData({
+              dataLabels: Object.keys(res.data),
+              dataList: Object.values(res.data),
+            });
+            customToast("통계 불러오기 성공!", "success");
+          })
+          .catch(() => customToast("잘못된 SURL 입니다.", "error"))
+      : DayStats(input.slice(20, input.length)) //URL의 프로토콜과 도메인 자르기
+          .then((res) => {
+            console.log(dateData);
+            setDateData({
+              dataLabels: Object.keys(res.data),
+              dataList: Object.values(res.data),
+            });
+            customToast("통계 불러오기 성공!", "success");
+          })
+          .catch(() => customToast("잘못된 SURL 입니다.", "error"));
+  };
+
   const { dataList, dataLabels } = dateData;
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
@@ -31,7 +65,11 @@ function Stats() {
         customToast("통계 불러오기 성공!", "success");
       })
       .catch(() => customToast("잘못된 SURL 입니다.", "error"));
+    WorldStats(input.slice(20, input.length))
+      .then((res) => console.log("World stats", res))
+      .catch((error) => console.log(error));
   };
+
   return (
     <>
       <Header></Header>
@@ -45,9 +83,33 @@ function Stats() {
             />
             <StatsInputBTN onClick={onStats}>통계보기</StatsInputBTN>
           </StatsInputBox>
-          <Text>방문자 통계</Text>
-          <ContryChart></ContryChart>
-          <DayChart dataList={dataList} dataLabels={dataLabels}></DayChart>
+          <Text>나라별 방문자 통계</Text>
+          <ContryChart />
+          <Text
+            onMouseMove={mouseMove}
+            onMouseOver={() => {
+              setHover(true);
+            }}
+            onMouseLeave={() => {
+              setHover(false);
+            }}
+            onClick={onHandleChart}
+          >
+            {changeChart ? "일간별 방문자 통계" : "주간별 방문자 통계"}
+          </Text>
+          {hover && (
+            <ToolTip
+              x={x}
+              y={y}
+              text={
+                changeChart
+                  ? "주간 통계를 보려면 클릭"
+                  : "일간 통계를 보려면 클릭"
+              }
+            ></ToolTip>
+          )}
+
+          <DayChart dataList={dataList} dataLabels={dataLabels} />
         </Template>
       </Frame>
     </>
@@ -120,7 +182,6 @@ const StatsInputBTN = styled.div`
 
 const Text = styled.p`
   margin-top: 50px;
-  margin-bottom: -20px;
   font-size: 40px;
   font-weight: bold;
   font-family: ${({ theme }) => theme.font.pretendard};

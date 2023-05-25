@@ -52,7 +52,7 @@ function DayChart({ dataList, dataLabels }: Props) {
 
       y: {
         ticks: {
-          min: 20, // y축 스케일에 대한 최소값 설정
+          min: 10, // y축 스케일에 대한 최소값 설정
           stepSize: 1, // y축 그리드 한 칸당 수치
         },
       },
