@@ -2,28 +2,29 @@ import React from "react";
 import styled, { css } from "styled-components";
 
 interface Props {
-  geoName: string;
+  text: string;
   x: number;
   y: number;
 }
 
-function ToolTip({ x, y, geoName }: Props) {
+function ToolTip({ x, y, text }: Props) {
   return (
-    <Frame x={x} y={y} geoName={geoName}>
-      {geoName} : 10
+    <Frame x={x} y={y} text={text}>
+      {text}
     </Frame>
   );
 }
 
 const Frame = styled.div<Props>`
   ${(props) =>
-    props.geoName === ""
+    props.text === ""
       ? css`
           display: none;
         `
       : css`
-          width: 100px;
+          min-width: 80px;
           height: 50px;
+          padding: 0px 10px 0px 10px;
           display: flex;
           justify-content: center;
           align-items: center;
