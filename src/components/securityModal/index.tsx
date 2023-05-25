@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Refresh } from "../../assets/img";
-import GetCode from "../../apis/statisticsAPI/getCode";
+import GetCode from "../../apis/sortUrl/getCode";
 import { customToast } from "../../utils/Toast";
 import CreateSURL from "../../apis/sortUrl/createSURL";
 
@@ -47,19 +47,21 @@ function SecurityModal({
     console.log(input, securityCode);
     if (input === securityCode) {
       customToast("인증 성공", "success");
-      setClick({
-        surlClick: true,
-        modalClick: false,
-      });
-      CreateSURL(urlInput)
-        .then((res) => {
-          setSurl(res.data.surl);
-          customToast("SURL success!", "success");
-        })
-        .catch((err) => {
-          console.log(err);
-          customToast("Error", "error");
+      setTimeout(() => {
+        setClick({
+          surlClick: true,
+          modalClick: false,
         });
+        CreateSURL(urlInput)
+          .then((res) => {
+            setSurl(res.data.surl);
+            customToast("SURL success!", "success");
+          })
+          .catch((err) => {
+            console.log(err);
+            customToast("Error", "error");
+          });
+      }, 1000);
     } else if (input === "") {
       customToast("보안문자를 입력해주세요.", "error");
     } else {
@@ -161,7 +163,7 @@ const CodeInputBox = styled.div`
 `;
 
 const CodeInput = styled.input`
-  width: 320px;
+  width: 100%;
   height: 50px;
   outline: none;
   border: none;
@@ -176,7 +178,7 @@ const CodeInput = styled.input`
 `;
 
 const CodeBTN = styled.div`
-  width: 100px;
+  width: 120px;
   height: 50px;
   background: ${({ theme }) => theme.color.point};
   border-radius: 30px;

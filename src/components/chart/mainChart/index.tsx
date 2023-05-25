@@ -8,7 +8,7 @@ interface Props {
   dataLabels: string[];
 }
 
-function DayChart({ dataList, dataLabels }: Props) {
+function MainChart({ dataList, dataLabels }: Props) {
   let dataColor: string[] = [];
   for (let i = 0; i < dataList.length; i++) {
     if (i === dataList.length - 1) {
@@ -17,25 +17,6 @@ function DayChart({ dataList, dataLabels }: Props) {
       dataColor.push("#6680B5");
     }
   }
-
-  //일주일 전부터 오늘 날짜까지 구하기
-  // let date = new Date();
-  // const thisday = date.getDate();
-  // const thisMonth = date.getMonth() + 1;
-
-  // for (let i = 0; i <= 7; i++) {
-  //   if (thisday - i <= 0) {
-  //     let weekAgo = date.setDate(thisday - i);
-  //     date = new Date(weekAgo);
-  //     const day = `${thisMonth - 1}월 ${date.getDate()}일`;
-  //     dayLabels.unshift(day);
-  //   } else {
-  //     let weekAgo = date.setDate(thisday - i);
-  //     date = new Date(weekAgo);
-  //     const day = `${thisMonth}월 ${date.getDate()}일`;
-  //     dayLabels.unshift(day);
-  //   }
-  // }
 
   const options: object = {
     plugins: {
@@ -52,8 +33,7 @@ function DayChart({ dataList, dataLabels }: Props) {
 
       y: {
         ticks: {
-          min: 10, // y축 스케일에 대한 최소값 설정
-          stepSize: 1, // y축 그리드 한 칸당 수치
+          stepSize: 2, // y축 그리드 한 칸당 수치
         },
       },
     },
@@ -81,4 +61,4 @@ const ChartContainer = styled.div`
   height: 350px;
   margin-bottom: 50px;
 `;
-export default DayChart;
+export default MainChart;
