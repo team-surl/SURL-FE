@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import Header from "../common/header";
 import { LinkImg, CopyImg, Download } from "../../assets/img";
-import DayChart from "../chart/dayChart";
+import MainChart from "../chart/mainChart";
 import { QRCodeCanvas } from "qrcode.react";
 import { customToast } from "../../utils/Toast";
 import useCopyClipBoard from "../../hooks/useTextCopy";
 import GetCode from "../../apis/sortUrl/getCode";
 import SecurityModal from "../securityModal";
+import MainStats from "../../apis/stats/mainStats";
+
+type objectType = {
+  dataList: number[];
+  dataLabels: string[];
+};
 
 function Main() {
   const [input, setInput] = useState<string>("");
@@ -29,6 +35,23 @@ function Main() {
     securityCode: "",
   });
   const { image, securityCode } = code;
+  const [dateData, setDateData] = useState<objectType>({
+    dataList: [],
+    dataLabels: [],
+  });
+  const { dataList, dataLabels } = dateData;
+
+  useEffect(() => {
+    MainStats()
+      .then((res) => {
+        setDateData({
+          dataList: Object.values(res.data),
+          dataLabels: Object.keys(res.data),
+        });
+        console.log(dataLabels, dataList);
+      })
+      .catch(() => customToast("잘못된 SURL 입니다.", "error"));
+  }, []);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (surlClick) {
@@ -159,7 +182,10 @@ function Main() {
             )}
           </URLBox>
           <Text>방문자 통계</Text>
-          <DayChart />
+          <MainChart
+            dataList={dateData.dataList}
+            dataLabels={dateData.dataLabels}
+          />
         </Template>
       </Frame>
     </>
