@@ -8,66 +8,75 @@ import { customToast } from "../../utils/Toast";
 import ToolTip from "../tooltip/index";
 import WeekStats from "../../apis/stats/weekStats";
 import WorldStats from "../../apis/stats/worldStatistics";
-type objectType = {
+type chartDataType = {
   dataList: number[];
   dataLabels: string[];
 };
-
 function Stats() {
   const [input, setInput] = useState("");
-  const [dateData, setDateData] = useState<objectType>({
+  const [dateData, setDateData] = useState<chartDataType>({
     dataList: [],
     dataLabels: [],
   });
+  const { dataList, dataLabels } = dateData;
   const [changeChart, setChangeChart] = useState<boolean>(false);
   const [xy, setXY] = useState({ x: 0, y: 0 });
   const { x, y } = xy;
   const [hover, setHover] = useState(false);
+  const [geoList, setGeoList] = useState({});
+
   const mouseMove = (e: React.MouseEvent) => {
     setXY({ x: e.clientX, y: e.clientY });
   };
-  const onHandleChart = () => {
+
+  const onHandleChart = (e: React.MouseEvent) => {
     setChangeChart(!changeChart);
-    changeChart
-      ? WeekStats(input.slice(20, input.length))
-          .then((res) => {
-            setDateData({
-              dataLabels: Object.keys(res.data),
-              dataList: Object.values(res.data),
-            });
-            customToast("통계 불러오기 성공!", "success");
-          })
-          .catch(() => customToast("잘못된 SURL 입니다.", "error"))
-      : DayStats(input.slice(20, input.length)) //URL의 프로토콜과 도메인 자르기
-          .then((res) => {
-            console.log(dateData);
-            setDateData({
-              dataLabels: Object.keys(res.data),
-              dataList: Object.values(res.data),
-            });
-            customToast("통계 불러오기 성공!", "success");
-          })
-          .catch(() => customToast("잘못된 SURL 입니다.", "error"));
+    if (input === "") {
+      e.preventDefault();
+      customToast("값을 입력해주세요", "error");
+    } else {
+      changeChart
+        ? DayStats(input.slice(20, input.length)) //URL의 프로토콜과 도메인 자르기
+            .then((res) => {
+              setDateData({
+                dataLabels: Object.keys(res.data),
+                dataList: Object.values(res.data),
+              });
+              customToast("통계 불러오기 성공!", "success");
+            })
+            .catch(() => customToast("통계 불러오기 실패", "error"))
+        : WeekStats(input.slice(20, input.length))
+            .then((res) => {
+              setDateData({
+                dataLabels: Object.keys(res.data),
+                dataList: Object.values(res.data),
+              });
+              customToast("통계 불러오기 성공!", "success");
+            })
+            .catch(() => customToast("통계 불러오기 실패", "error"));
+    }
   };
 
-  const { dataList, dataLabels } = dateData;
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
+
   const onStats = () => {
     DayStats(input.slice(20, input.length)) //URL의 프로토콜과 도메인 자르기
       .then((res) => {
-        console.log(dateData);
         setDateData({
           dataLabels: Object.keys(res.data),
           dataList: Object.values(res.data),
         });
         customToast("통계 불러오기 성공!", "success");
       })
-      .catch(() => customToast("잘못된 SURL 입니다.", "error"));
+      .catch(() => customToast("통계 불러오기 실패", "error"));
+
     WorldStats(input.slice(20, input.length))
-      .then((res) => console.log("World stats", res))
-      .catch((error) => console.log(error));
+      .then((res) => {
+        setGeoList(res.data);
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -84,7 +93,7 @@ function Stats() {
             <StatsInputBTN onClick={onStats}>통계보기</StatsInputBTN>
           </StatsInputBox>
           <Text>나라별 방문자 통계</Text>
-          <ContryChart />
+          <ContryChart geoList={geoList} />
           <Text
             onMouseMove={mouseMove}
             onMouseOver={() => {
@@ -95,7 +104,7 @@ function Stats() {
             }}
             onClick={onHandleChart}
           >
-            {changeChart ? "일간별 방문자 통계" : "주간별 방문자 통계"}
+            {changeChart ? "주간별 방문자 통계" : "일간별 방문자 통계"}
           </Text>
           {hover && (
             <ToolTip
@@ -103,8 +112,8 @@ function Stats() {
               y={y}
               text={
                 changeChart
-                  ? "주간 통계를 보려면 클릭"
-                  : "일간 통계를 보려면 클릭"
+                  ? "일간 통계를 보려면 클릭"
+                  : "주간 통계를 보려면 클릭"
               }
             ></ToolTip>
           )}

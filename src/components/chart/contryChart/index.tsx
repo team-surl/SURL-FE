@@ -3,14 +3,15 @@ import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import styled from "styled-components";
 import ToolTip from "../../tooltip";
 import axios from "axios";
-// import GetGeo from "../../../apis/geo/getGeo";
 
+interface Props {
+  geoList: { [key: string]: string };
+}
 const geoUrl =
   "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json";
 
-function ContryChart() {
+function ContryChart({ geoList }: Props) {
   const [geoName, setGeo] = useState("");
-  const [geoList, setGeoList] = useState();
   const [hover, setHover] = useState(false);
   const [xy, setXY] = useState({ x: 0, y: 0 });
   const { x, y } = xy;
@@ -22,13 +23,14 @@ function ContryChart() {
         console.log("GEO", res.data);
       })
       .catch((err) => console.log(err));
-    console.log(navigator.language);
-  }, []);
+  }, [geoList]);
+
   const mouseMove = (e: React.MouseEvent) => {
     setXY({ x: e.clientX, y: e.clientY });
+    if (geoList[geoName]) {
+      setGeo(geoName + " : " + geoList[geoName]);
+    }
   };
-
-  //geo 정보 확인
 
   return (
     <Frame onMouseMove={mouseMove}>
