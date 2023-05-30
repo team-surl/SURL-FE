@@ -49,11 +49,10 @@ function DayChart({ dataList, dataLabels }: Props) {
           display: false,
         },
       },
-
       y: {
+        suggestedMin: 5,
         ticks: {
-          min: 10, // y축 스케일에 대한 최소값 설정
-          stepSize: 1, // y축 그리드 한 칸당 수치
+          stepSize: 2, // y축 그리드 한 칸당 수치
         },
       },
     },

@@ -30,14 +30,15 @@ function MainChart({ dataList, dataLabels }: Props) {
           display: false,
         },
       },
-
       y: {
+        suggestedMin: 5,
         ticks: {
           stepSize: 2, // y축 그리드 한 칸당 수치
         },
       },
     },
   };
+
   const data = {
     labels: dataLabels,
     datasets: [

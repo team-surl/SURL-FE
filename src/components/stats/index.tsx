@@ -75,6 +75,7 @@ function Stats() {
     WorldStats(input.slice(20, input.length))
       .then((res) => {
         setGeoList(res.data);
+        console.log(res.data);
       })
       .catch((err) => console.log(err));
   };

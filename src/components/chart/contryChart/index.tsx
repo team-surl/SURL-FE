@@ -7,12 +7,14 @@ import axios from "axios";
 interface Props {
   geoList: { [key: string]: string };
 }
+
 const geoUrl =
   "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json";
 
 function ContryChart({ geoList }: Props) {
   const [geoName, setGeo] = useState("");
   const [hover, setHover] = useState(false);
+  const [geoCheck, setGeoCheck] = useState("");
   const [xy, setXY] = useState({ x: 0, y: 0 });
   const { x, y } = xy;
 
@@ -43,13 +45,15 @@ function ContryChart({ geoList }: Props) {
                 <Geography
                   onMouseOver={() => {
                     setGeo(geo.id);
+                    setGeoCheck(geo.id);
                     setHover(!hover);
                   }}
                   onMouseLeave={() => {
                     setGeo("");
+                    setGeoCheck("");
                     setHover(!hover);
                   }}
-                  fill={geo.id === geoName ? "#6680B5" : "#abb7cf"}
+                  fill={geo.id === geoCheck ? "#6680B5" : "#abb7cf"}
                   key={geo.rsmKey}
                   geography={geo}
                 />
