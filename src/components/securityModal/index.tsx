@@ -138,7 +138,7 @@ const ReCode = styled.div`
   width: 330px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
   color: ${({ theme }) => theme.color.gray400};
   font-size: 25px;
   margin-top: 20px;
