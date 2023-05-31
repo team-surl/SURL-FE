@@ -8,10 +8,12 @@ import { customToast } from "../../utils/Toast";
 import ToolTip from "../tooltip/index";
 import WeekStats from "../../apis/stats/weekStats";
 import WorldStats from "../../apis/stats/worldStatistics";
+
 type chartDataType = {
   dataList: number[];
   dataLabels: string[];
 };
+
 function Stats() {
   const [input, setInput] = useState("");
   const [dateData, setDateData] = useState<chartDataType>({
@@ -42,18 +44,18 @@ function Stats() {
                 dataLabels: Object.keys(res.data),
                 dataList: Object.values(res.data),
               });
-              customToast("통계 불러오기 성공!", "success");
+              customToast("일간 통계 불러오기 성공!", "success");
             })
-            .catch(() => customToast("통계 불러오기 실패", "error"))
+            .catch(() => customToast("일간 통계 불러오기 실패", "error"))
         : WeekStats(input.slice(20, input.length))
             .then((res) => {
               setDateData({
                 dataLabels: Object.keys(res.data),
                 dataList: Object.values(res.data),
               });
-              customToast("통계 불러오기 성공!", "success");
+              customToast("주간 통계 불러오기 성공!", "success");
             })
-            .catch(() => customToast("통계 불러오기 실패", "error"));
+            .catch(() => customToast("주간 통계 불러오기 실패", "error"));
     }
   };
 
@@ -68,16 +70,16 @@ function Stats() {
           dataLabels: Object.keys(res.data),
           dataList: Object.values(res.data),
         });
-        customToast("통계 불러오기 성공!", "success");
+        customToast("일간 통계 불러오기 성공!", "success");
       })
       .catch(() => customToast("통계 불러오기 실패", "error"));
 
     WorldStats(input.slice(20, input.length))
       .then((res) => {
         setGeoList(res.data);
-        console.log(res.data);
+        customToast("세계차트 불러오기 성공!", "success");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => customToast("세계차트 불러오기 실패", "error"));
   };
 
   return (
@@ -95,7 +97,7 @@ function Stats() {
           </StatsInputBox>
           <Text>나라별 방문자 통계</Text>
           <ContryChart geoList={geoList} />
-          <Text
+          <ChangeChart
             onMouseMove={mouseMove}
             onMouseOver={() => {
               setHover(true);
@@ -106,7 +108,7 @@ function Stats() {
             onClick={onHandleChart}
           >
             {changeChart ? "주간별 방문자 통계" : "일간별 방문자 통계"}
-          </Text>
+          </ChangeChart>
           {hover && (
             <ToolTip
               x={x}
@@ -196,6 +198,20 @@ const Text = styled.p`
   font-weight: bold;
   font-family: ${({ theme }) => theme.font.pretendard};
   color: ${({ theme }) => theme.color.point1};
+`;
+
+const ChangeChart = styled.p`
+  margin-top: 50px;
+  font-size: 40px;
+  font-weight: bold;
+  font-family: ${({ theme }) => theme.font.pretendard};
+  color: ${({ theme }) => theme.color.point1};
+  &:hover {
+    color: ${({ theme }) => theme.color.point};
+  }
+  &:active {
+    color: ${({ theme }) => theme.color.point1};
+  }
 `;
 
 export default Stats;

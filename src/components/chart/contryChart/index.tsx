@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import styled from "styled-components";
 import ToolTip from "../../tooltip";
-import axios from "axios";
 
 interface Props {
   geoList: { [key: string]: string };
@@ -17,15 +16,6 @@ function ContryChart({ geoList }: Props) {
   const [geoCheck, setGeoCheck] = useState("");
   const [xy, setXY] = useState({ x: 0, y: 0 });
   const { x, y } = xy;
-
-  useEffect(() => {
-    axios
-      .get(geoUrl)
-      .then((res) => {
-        console.log("GEO", res.data);
-      })
-      .catch((err) => console.log(err));
-  }, [geoList]);
 
   const mouseMove = (e: React.MouseEvent) => {
     setXY({ x: e.clientX, y: e.clientY });

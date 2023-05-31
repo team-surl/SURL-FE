@@ -48,7 +48,6 @@ function Main() {
           dataList: Object.values(res.data),
           dataLabels: Object.keys(res.data),
         });
-        console.log(dataLabels, dataList);
       })
       .catch(() => customToast("잘못된 SURL 입니다.", "error"));
   }, []);
@@ -78,7 +77,6 @@ function Main() {
       GetCode()
         .then((res) => {
           setClick({ ...click, modalClick: true });
-          console.log(res.data);
           setCode({
             image: res.data.image,
             securityCode: res.data.code,
@@ -182,10 +180,7 @@ function Main() {
             )}
           </URLBox>
           <Text>방문자 통계</Text>
-          <MainChart
-            dataList={dateData.dataList}
-            dataLabels={dateData.dataLabels}
-          />
+          <MainChart dataList={dataList} dataLabels={dataLabels} />
         </Template>
       </Frame>
     </>

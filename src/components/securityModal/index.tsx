@@ -44,24 +44,21 @@ function SecurityModal({
 
   const onSubmit = () => {
     setInput("");
-    console.log(input, securityCode);
     if (input === securityCode) {
       customToast("인증 성공", "success");
-      setTimeout(() => {
-        setClick({
-          surlClick: true,
-          modalClick: false,
+      setClick({
+        surlClick: true,
+        modalClick: false,
+      });
+      CreateSURL(urlInput)
+        .then((res) => {
+          setSurl(res.data.surl);
+          customToast("SURL success!", "success");
+        })
+        .catch((err) => {
+          console.log(err);
+          customToast("Error", "error");
         });
-        CreateSURL(urlInput)
-          .then((res) => {
-            setSurl(res.data.surl);
-            customToast("SURL success!", "success");
-          })
-          .catch((err) => {
-            console.log(err);
-            customToast("Error", "error");
-          });
-      }, 1000);
     } else if (input === "") {
       customToast("보안문자를 입력해주세요.", "error");
     } else {
