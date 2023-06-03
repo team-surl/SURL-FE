@@ -113,6 +113,7 @@ const Box = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 `;
 
 const InfoBox = styled.div`
@@ -120,7 +121,6 @@ const InfoBox = styled.div`
   height: 100px;
   border: solid 1px #ff858d;
   background: #fef2f2;
-  margin-top: 100px;
   color: ${({ theme }) => theme.color.gray400};
   font-size: 30px;
   display: flex;
@@ -129,18 +129,20 @@ const InfoBox = styled.div`
 `;
 
 const CodeFrame = styled.img`
-  width: 350px;
-  height: 100px;
-  margin-top: 70px;
+  width: 400px;
+  height: 180px;
+  margin-top: 60px;
 `;
 
 const ReCode = styled.div`
   width: 330px;
+  height: 25px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   color: ${({ theme }) => theme.color.gray400};
-  font-size: 20px;
+  font-size: 22px;
   margin-top: 20px;
   font-weight: bold;
   cursor: pointer;
