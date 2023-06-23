@@ -63,6 +63,12 @@ function Stats() {
     setInput(e.target.value);
   };
 
+  const handleOnKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      onStats(); // Enter 입력이 되면 클릭 이벤트 실행
+    }
+  };
+
   const onStats = () => {
     DayStats(input.slice(20, input.length)) //URL의 프로토콜과 도메인 자르기
       .then((res) => {
@@ -92,6 +98,7 @@ function Stats() {
               placeholder="통계를 보려면 SURL을 입력하세요."
               onChange={onChange}
               value={input}
+              onKeyPress={handleOnKeyPress}
             />
             <StatsInputBTN onClick={onStats}>통계보기</StatsInputBTN>
           </StatsInputBox>

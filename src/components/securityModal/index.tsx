@@ -42,6 +42,12 @@ function SecurityModal({
     setInput(e.target.value);
   };
 
+  const handleOnKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      onSubmit(); // Enter 입력이 되면 클릭 이벤트 실행
+    }
+  };
+
   const onSubmit = () => {
     setInput("");
     if (input === securityCode) {
@@ -87,6 +93,7 @@ function SecurityModal({
             placeholder="보안문자 입력"
             type="number"
             value={input}
+            onKeyPress={handleOnKeyPress}
           ></CodeInput>
           <CodeBTN onClick={onSubmit}>확인</CodeBTN>
         </CodeInputBox>
